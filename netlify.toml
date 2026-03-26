@@ -1,13 +1,3 @@
 [build]
   publish = "frontend/.next"
   command = "cd frontend && npm install && npm run build"
-
-[[redirects]]
-  from = "/_next/*"
-  to = "/_next/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
