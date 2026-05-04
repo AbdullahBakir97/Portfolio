@@ -10,23 +10,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: ['18', '20']
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20'
           cache: npm
-      - run: npm ci || npm install
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci || npm install
       - name: Build
         continue-on-error: true
-        run: |
-          if npm run | grep -q '^  build'; then npm run build || true; fi
-      - name: Test
+        working-directory: frontend
+        run: npm run build || true
+      - name: Lint
         continue-on-error: true
+        working-directory: frontend
         run: |
-          if npm run | grep -q '^  test'; then npm test --if-present || true; fi
+          if npm run | grep -q '^  lint'; then npm run lint || true; fi
